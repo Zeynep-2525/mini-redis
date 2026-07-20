@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #define INITIAL_CAPACITY 16
 
-typedef struct Entry Entry;//forward declaration
+typedef struct Entry Entry; // forward declaration
 
 struct HashMap
 {
@@ -15,7 +15,7 @@ typedef struct Entry
 {
     const char *key;
     const char *value;
-   struct  Entry *next;
+    struct Entry *next;
 
 } Entry;
 
@@ -27,16 +27,26 @@ HashMap *hashmap_create(void)
     {
         return NULL;
     }
-    map->count=0;
-    map->bucket_count=INITIAL_CAPACITY;
-    Entry** buckets=calloc(map->bucket_count,sizeof(*buckets));
-    if(buckets == NULL){
+    map->count = 0;
+    map->bucket_count = INITIAL_CAPACITY;
+    Entry **buckets = calloc(map->bucket_count, sizeof(*buckets));
+    if (buckets == NULL)
+    {
         free(map);
         return NULL;
     }
-        map->buckets=buckets;
-
+    map->buckets = buckets;
 
     return map;
 }
 
+static unsigned long hash_djb2(const char *key)
+{
+    unsigned long hash = 5381;
+    int c;
+    while ((c = *key++))
+    {
+        hash = hash * 33 + c;
+    }
+    return hash;
+}
